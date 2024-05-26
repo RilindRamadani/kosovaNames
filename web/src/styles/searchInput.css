@@ -139,3 +139,26 @@ button+button {
 .hidden {
     display: none;
 }
+
+.outerDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.totalParagraph {
+    margin-right: 10px;
+    font-size: x-large;
+    font-weight: bolder;
+    margin: 0 !important;
+}
+
+.search-div {
+    display: flex;
+
+}
+
+.paragraph-div {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}

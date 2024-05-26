@@ -1,6 +1,7 @@
 import React, { FC, memo, useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { GraphData, CitizenNamePerAge } from '../types';
+import { Color } from '../API/Enums/EnumColors';
 
 interface StackedGraphProps {
     graphData: GraphData[];
@@ -98,8 +99,8 @@ const StackedGraph: FC<StackedGraphProps> = ({ graphData, isStacked , emriValues
                     type="monotone"
                     stackId={isStacked ? '1' : `${index}stack`}
                     dataKey={`dataKey-${index}`}
-                    stroke={colors[index % colors.length]}
-                    fill={colors[index % colors.length]}
+                    stroke={Color[`Number${index + 1}` as keyof typeof Color]}
+                    fill={Color[`Number${index + 1}` as keyof typeof Color]}
                 />
             ))}
         </AreaChart>
