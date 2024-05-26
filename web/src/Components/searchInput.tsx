@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { NameSearchService } from '../API/name-search-api-service';
 
-export const SearchComponent: React.FC = () => {
+interface SearchComponentProps {
+    onSearch: (input: string) => void;
+}
+
+export const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
     const [input, setInput] = useState('');
-    const [data, setData] = useState(null);
 
-    const handleSearch = async () => {
-        const service = new NameSearchService();
-        const response = await service.searchName(input);
-        console.log(response);
-        setData(response);
+    const handleSearch = () => {
+        onSearch(input);
     };
 
     return (

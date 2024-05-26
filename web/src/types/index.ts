@@ -1,1 +1,2 @@
-export * as Types from './GenderCount.type';
+export * from './GenderCount.type';
+export * from './GraphData.type';

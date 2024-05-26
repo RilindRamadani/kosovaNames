@@ -19,14 +19,17 @@ export type GenderCountMunicipality = {
 export type CitizenNamePerAge = {
     emri: string;
     viti: number;
-    total: number;
+    totali: string;
+    id: number;
 };
 
 export type DataItem = {
     genderCount: GenderCount;
     genderCountMunicipality: GenderCountMunicipality[];
-    citizenNamePerAge: CitizenNamePerAge[];
+    citizensNamePerAge: CitizenNamePerAge[]; // updated to match the response
     top10: CitizenNamePerAge[];
+    top5: any | null; // included this to match the response
+    id: number;
 };
 
 export type ApiResponse = {
