@@ -4,6 +4,8 @@ import { GraphData, CitizenNamePerAge } from '../types';
 
 interface StackedGraphProps {
     graphData: GraphData[];
+    isStacked: boolean;
+    emriValues: string[];
 }
 type Item = {
     emri: string;
@@ -13,10 +15,17 @@ type Item = {
     [key: string]: string | number;
 };
 
+interface TooltipProps {
+    active?: boolean;
+    payload?: { value: string; }[];
+    label?: string;
+    emriValues: string[];
+}
+
 const colors = ["#8884d8", "#82ca9d", "#ffc658", "#00C49F", "#FFBB28", "#FF8042"]; // Add more colors if needed
 
 
-const StackedGraph: FC<StackedGraphProps> = ({ graphData }) => {
+const StackedGraph: FC<StackedGraphProps> = ({ graphData, isStacked , emriValues}) => {
     const [allData, setAllData] = useState<any[]>([]);
 
     useEffect(() => {
@@ -50,10 +59,27 @@ const StackedGraph: FC<StackedGraphProps> = ({ graphData }) => {
 
     }, [graphData]);
 
+    const CustomTooltip: React.FC<TooltipProps> = ({ active, payload, label, emriValues }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="custom-tooltip">
+                    <p className="label">{`Year : ${label}`}</p>
+                    {payload.map((item, index) => (
+                        <p key={index} className="desc">
+                            {`Emri ${emriValues[index]}: ${item.value}`}
+                        </p>
+                    ))}
+                </div>
+            );
+        }
+
+        return null;
+    };
+
     return (
         <AreaChart
-            width={1000}
-            height={800}
+            width={1400}
+            height={900}
             data={allData}
             margin={{
                 top: 10,
@@ -65,12 +91,12 @@ const StackedGraph: FC<StackedGraphProps> = ({ graphData }) => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="viti" />
             <YAxis />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip emriValues={emriValues} />} />
             {graphData.map((item, index) => (
                 <Area
                     key={index}
                     type="monotone"
-                    stackId={`${index}stack`}
+                    stackId={isStacked ? '1' : `${index}stack`}
                     dataKey={`dataKey-${index}`}
                     stroke={colors[index % colors.length]}
                     fill={colors[index % colors.length]}

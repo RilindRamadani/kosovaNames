@@ -4,39 +4,61 @@ import { CitizenNamePerAge, GraphData } from './types/index';
 import { SearchComponent } from './Components/searchInput';
 import StackedGraph from './Components/graph';
 import './App.css';
+import './styles/graph.css';
 
 function App() {
-  const [data1, setData1] = useState<CitizenNamePerAge[] | null>(null);
-  const [data2, setData2] = useState<CitizenNamePerAge[] | null>(null);
+  const [data, setData] = useState<(CitizenNamePerAge[] | null)[]>([]);
   const [finalData, setFinalData] = useState<GraphData[]>();
+  const [isStacked, setIsStacked] = useState(true);
+  const [emriValues, setEmriValues] = useState<string[]>([]);
 
-  const handleSearch1 = async (input: string) => {
-    const service = new NameSearchService();
-    const response = await service.searchName(input);
-    // console.log(response);
-    setData1(response.citizensNamePerAge);
-  };
-
-  const handleSearch2 = async (input: string) => {
-    const service = new NameSearchService();
-    const response = await service.searchName(input);
-    // console.log(response);
-    setData2(response.citizensNamePerAge);
+  const handleSearch = async (input: string, index: number) => {
+    if (input.trim() === '') {
+      // If the input is empty, remove the corresponding data and emri value
+      setData(prevData => prevData.filter((_, i) => i !== index));
+      setEmriValues(prevEmriValues => prevEmriValues.filter((_, i) => i !== index));
+    } else {
+      const service = new NameSearchService();
+      const response = await service.searchName(input);
+      setData(prevData => {
+        const newData = [...prevData];
+        newData[index] = response.citizensNamePerAge;
+        return newData;
+      });
+      setEmriValues(prevEmriValues => {
+        const newEmriValues = [...prevEmriValues];
+        newEmriValues[index] = input;
+        return newEmriValues;
+      });
+    }
   };
 
   useEffect(() => {
-    const newData1 = data1 ? [{ data: data1 }] : [];
-    const newData2 = data2 ? [{ data: data2 }] : [];
-    setFinalData([...newData1, ...newData2]);
-}, [data1, data2]);
+    const newData = data.map((dataItem, index) => dataItem ? [{ data: dataItem }] : []);
+    setFinalData(newData.flat());
+  }, [data]);
+
+  const addSearchInput = () => {
+    setData(prevData => [...prevData, null]);
+  };
+
+  const toggleStacked = () => {
+    setIsStacked(prevIsStacked => !prevIsStacked);
+  };
 
   return (
     <div className="App">
-      <SearchComponent onSearch={handleSearch1} />
-      <SearchComponent onSearch={handleSearch2} />
+      {data.map((_, index) => (
+        <SearchComponent key={index} onSearch={(input: string) => handleSearch(input, index)} />
+      ))}
+      <div style={{ marginTop: '20px', marginBottom: '50px' }}>
+        <button onClick={addSearchInput}>+</button>
+        <button onClick={toggleStacked}>{isStacked ? 'Switch to Overlay' : 'Switch to Stacked'}</button>
+      </div>
 
-      <div className=''>
-        {finalData && <StackedGraph graphData={finalData} />}
+
+      <div className='center-content'>
+        {finalData && <StackedGraph graphData={finalData} isStacked={isStacked} emriValues={emriValues} />}
       </div>
 
     </div>

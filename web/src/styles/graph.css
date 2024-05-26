@@ -1,0 +1,7 @@
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* This makes the div take up the full height of the viewport */
+}
