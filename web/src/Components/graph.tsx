@@ -1,6 +1,6 @@
 import React, { FC, memo, useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { GraphData, CitizenNamePerAge } from '../types';
+import { GraphData } from '../types';
 import { Color } from '../API/Enums/EnumColors';
 
 interface StackedGraphProps {
@@ -22,9 +22,6 @@ interface TooltipProps {
     label?: string;
     emriValues: string[];
 }
-
-const colors = ["#8884d8", "#82ca9d", "#ffc658", "#00C49F", "#FFBB28", "#FF8042"]; // Add more colors if needed
-
 
 const StackedGraph: FC<StackedGraphProps> = ({ graphData, isStacked , emriValues}) => {
     const [allData, setAllData] = useState<any[]>([]);
