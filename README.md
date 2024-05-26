@@ -1,4 +1,4 @@
-# Project Title
+# Kosova Names Graph
 
 This project is a data visualization tool built with React and TypeScript. It allows users to search for a name ("emri") and displays a stacked or overlayed area chart based on the search results.
 
